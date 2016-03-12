@@ -214,6 +214,7 @@ set(LLVM_ALL_TARGETS
   CppBackend
   Hexagon
   Mips
+  Moxie
   MSP430
   NVPTX
   PowerPC
