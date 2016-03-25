@@ -63,7 +63,7 @@ bool MoxieInstrInfo::AnalyzeBranch(MachineBasicBlock &MBB,
                                  SmallVectorImpl<MachineOperand> &Cond,
                                  bool AllowModify) const {
   // FIXME
-  assert(0 && "Unimplemented");
+  // assert(0 && "Unimplemented");
   return false;
 }
 

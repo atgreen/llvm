@@ -12,7 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 def MoxieRet : SDNode<"MoxieISD::RET", SDTNone,
-                      []>;
+                      [SDNPHasChain, SDNPOptInGlue]>;
 
 include "MoxieInstrFormats.td"
 
