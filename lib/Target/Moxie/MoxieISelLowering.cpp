@@ -151,20 +151,12 @@ SDValue MoxieTargetLowering::LowerOperation(SDValue Op, SelectionDAG &DAG) const
 }
 
 // Calling Convention Implementation
-<<<<<<< HEAD
 #include "MoxieGenCallingConv.inc"
-=======
-// FIXME #include "MoxieGenCallingConv.inc"
->>>>>>> 04fdfe34d2a8f883e0ef4ddf2c252a4d7c2274fd
 
 SDValue MoxieTargetLowering::LowerFormalArguments(
     SDValue Chain, CallingConv::ID CallConv, bool IsVarArg,
     const SmallVectorImpl<ISD::InputArg> &Ins, SDLoc DL, SelectionDAG &DAG,
     SmallVectorImpl<SDValue> &InVals) const {
-<<<<<<< HEAD
-=======
-#if 0
->>>>>>> 04fdfe34d2a8f883e0ef4ddf2c252a4d7c2274fd
   switch (CallConv) {
   default:
     llvm_unreachable("Unsupported calling convention");
@@ -173,57 +165,6 @@ SDValue MoxieTargetLowering::LowerFormalArguments(
     break;
   }
 
-<<<<<<< HEAD
-=======
-  MachineFunction &MF = DAG.getMachineFunction();
-  MachineRegisterInfo &RegInfo = MF.getRegInfo();
-
-  // Assign locations to all of the incoming arguments.
-  SmallVector<CCValAssign, 16> ArgLocs;
-  CCState CCInfo(CallConv, IsVarArg, MF, ArgLocs, *DAG.getContext());
-  CCInfo.AnalyzeFormalArguments(Ins, CC_Moxie64);
-
-  for (auto &VA : ArgLocs) {
-    if (VA.isRegLoc()) {
-      // Arguments passed in registers
-      EVT RegVT = VA.getLocVT();
-      switch (RegVT.getSimpleVT().SimpleTy) {
-      default: {
-        errs() << "LowerFormalArguments Unhandled argument type: "
-               << RegVT.getSimpleVT().SimpleTy << '\n';
-        llvm_unreachable(0);
-      }
-      case MVT::i64:
-        unsigned VReg = RegInfo.createVirtualRegister(&Moxie::GPRRegClass);
-        RegInfo.addLiveIn(VA.getLocReg(), VReg);
-        SDValue ArgValue = DAG.getCopyFromReg(Chain, DL, VReg, RegVT);
-
-        // If this is an 8/16/32-bit value, it is really passed promoted to 64
-        // bits. Insert an assert[sz]ext to capture this, then truncate to the
-        // right size.
-        if (VA.getLocInfo() == CCValAssign::SExt)
-          ArgValue = DAG.getNode(ISD::AssertSext, DL, RegVT, ArgValue,
-                                 DAG.getValueType(VA.getValVT()));
-        else if (VA.getLocInfo() == CCValAssign::ZExt)
-          ArgValue = DAG.getNode(ISD::AssertZext, DL, RegVT, ArgValue,
-                                 DAG.getValueType(VA.getValVT()));
-
-        if (VA.getLocInfo() != CCValAssign::Full)
-          ArgValue = DAG.getNode(ISD::TRUNCATE, DL, VA.getValVT(), ArgValue);
-
-        InVals.push_back(ArgValue);
-      }
-    } else {
-      fail(DL, DAG, "defined with too many args");
-    }
-  }
-
-  if (IsVarArg || MF.getFunction()->hasStructRetAttr()) {
-    fail(DL, DAG, "functions with VarArgs or StructRet are not supported");
-  }
-#endif
-  assert(0 && "unimplemented");
->>>>>>> 04fdfe34d2a8f883e0ef4ddf2c252a4d7c2274fd
   return Chain;
 }
 
@@ -359,7 +300,6 @@ SDValue MoxieTargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
 
 SDValue
 MoxieTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
-<<<<<<< HEAD
 				 bool IsVarArg,
 				 const SmallVectorImpl<ISD::OutputArg> &Outs,
 				 const SmallVectorImpl<SDValue> &OutVals,
@@ -373,88 +313,15 @@ MoxieTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
   RetOps[0] = Chain; // Update chain.
   return DAG.getNode(Opc, DL, MVT::Other, RetOps);
 #endif
-=======
-                               bool IsVarArg,
-                               const SmallVectorImpl<ISD::OutputArg> &Outs,
-                               const SmallVectorImpl<SDValue> &OutVals,
-                               SDLoc DL, SelectionDAG &DAG) const {
-#if 0
-  // CCValAssign - represent the assignment of the return value to a location
-  SmallVector<CCValAssign, 16> RVLocs;
-  MachineFunction &MF = DAG.getMachineFunction();
-
-  // CCState - Info about the registers and stack slot.
-  CCState CCInfo(CallConv, IsVarArg, MF, RVLocs, *DAG.getContext());
-
-  if (MF.getFunction()->getReturnType()->isAggregateType()) {
-    fail(DL, DAG, "only integer returns supported");
-  }
-
-  // Analize return values.
-  CCInfo.AnalyzeReturn(Outs, RetCC_Moxie64);
-
-  SDValue Flag;
-  SmallVector<SDValue, 4> RetOps(1, Chain);
-
-  // Copy the result values into the output registers.
-  for (unsigned i = 0; i != RVLocs.size(); ++i) {
-    CCValAssign &VA = RVLocs[i];
-    assert(VA.isRegLoc() && "Can only return in registers!");
-
-    Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(), OutVals[i], Flag);
-
-    // Guarantee that all emitted copies are stuck together,
-    // avoiding something bad.
-    Flag = Chain.getValue(1);
-    RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
-  }
-
-  unsigned Opc = MoxieISD::RET_FLAG;
-  RetOps[0] = Chain; // Update chain.
-
-  // Add the flag if we have it.
-  if (Flag.getNode())
-    RetOps.push_back(Flag);
-
-  return DAG.getNode(Opc, DL, MVT::Other, RetOps);
-#endif
-  assert(0 && "unimplemented");
-  return Chain;
->>>>>>> 04fdfe34d2a8f883e0ef4ddf2c252a4d7c2274fd
 }
 
 SDValue MoxieTargetLowering::LowerCallResult(
     SDValue Chain, SDValue InFlag, CallingConv::ID CallConv, bool IsVarArg,
     const SmallVectorImpl<ISD::InputArg> &Ins, SDLoc DL, SelectionDAG &DAG,
     SmallVectorImpl<SDValue> &InVals) const {
-<<<<<<< HEAD
   assert(0 && "unimplemented");
   return DAG.getNode(MoxieISD::RET, DL, MVT::Other,
 		     Chain, nullptr);
-=======
-#if 0
-  MachineFunction &MF = DAG.getMachineFunction();
-  // Assign locations to each value returned by this call.
-  SmallVector<CCValAssign, 16> RVLocs;
-  CCState CCInfo(CallConv, IsVarArg, MF, RVLocs, *DAG.getContext());
-
-  if (Ins.size() >= 2) {
-    fail(DL, DAG, "only small returns supported");
-  }
-
-  CCInfo.AnalyzeCallResult(Ins, RetCC_Moxie64);
-
-  // Copy all of the result registers out of their specified physreg.
-  for (auto &Val : RVLocs) {
-    Chain = DAG.getCopyFromReg(Chain, DL, Val.getLocReg(),
-                               Val.getValVT(), InFlag).getValue(1);
-    InFlag = Chain.getValue(2);
-    InVals.push_back(Chain.getValue(0));
-  }
-#endif
-  assert(0 && "unimplemented");
-  return Chain;
->>>>>>> 04fdfe34d2a8f883e0ef4ddf2c252a4d7c2274fd
 }
 
 static void NegateCC(SDValue &LHS, SDValue &RHS, ISD::CondCode &CC) {
@@ -514,29 +381,10 @@ SDValue MoxieTargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const
 }
 
 const char *MoxieTargetLowering::getTargetNodeName(unsigned Opcode) const {
-<<<<<<< HEAD
   switch ((MoxieISD::NodeType)Opcode) {
   case MoxieISD::RET:
     return "MoxieISD::RET";
   }
-=======
-#if 0
-  switch ((MoxieISD::NodeType)Opcode) {
-  case MoxieISD::FIRST_NUMBER:
-    break;
-  case MoxieISD::RET_FLAG:
-    return "MoxieISD::RET_FLAG";
-  case MoxieISD::CALL:
-    return "MoxieISD::CALL";
-  case MoxieISD::SELECT_CC:
-    return "MoxieISD::SELECT_CC";
-  case MoxieISD::BR_CC:
-    return "MoxieISD::BR_CC";
-  case MoxieISD::Wrapper:
-    return "MoxieISD::Wrapper";
-  }
-#endif
->>>>>>> 04fdfe34d2a8f883e0ef4ddf2c252a4d7c2274fd
   return nullptr;
 }
 
