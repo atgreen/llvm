@@ -23,8 +23,7 @@ namespace llvm {
   class FunctionPass;
   class formatted_raw_ostream;
 
-  FunctionPass *createMoxieISelDag(MoxieTargetMachine &TM,
-                                    CodeGenOpt::Level OptLevel);
+  FunctionPass *createMoxieISelDag(MoxieTargetMachine &TM);
 
   FunctionPass *createMoxieBranchSelectionPass();
 

@@ -12,3 +12,9 @@
 //===----------------------------------------------------------------------===//
 
 def CSR : CalleeSavedRegs<(add R6, R7, R8, R9, R10, R11)>;
+
+def RetCC_MoxieEABI : CallingConv<[
+  // i32 are returned in registers r0 
+  CCIfType<[i32], CCAssignToReg<[R0]>>
+  ]>;
+  

@@ -11,6 +11,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+def MoxieRet : SDNode<"MoxieISD::RET", SDTNone,
+                      []>;
+
 include "MoxieInstrFormats.td"
 
 // NOP
@@ -22,3 +25,12 @@ def NOP : F1<0b000000,
               (ins),
               "nop",
               []>;
+
+let isReturn = 1, isTerminator = 1, hasDelaySlot=0, isBarrier = 1,
+    isNotDuplicable = 1 in {
+  def RET : F1<0b000001,
+                (outs),
+		(ins),
+		"ret",
+		[(MoxieRet)]>;
+}

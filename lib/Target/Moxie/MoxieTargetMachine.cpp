@@ -69,7 +69,7 @@ TargetPassConfig *MoxieTargetMachine::createPassConfig(PassManagerBase &PM) {
 // Install an instruction selector pass using
 // the ISelDag to gen Moxie code.
 bool MoxiePassConfig::addInstSelector() {
-  // FIXME  addPass(createMoxieISelDag(getMoxieTargetMachine()));
+  addPass(createMoxieISelDag(getMoxieTargetMachine()));
 
   return false;
 }

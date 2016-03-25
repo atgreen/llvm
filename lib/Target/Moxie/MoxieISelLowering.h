@@ -24,6 +24,7 @@ class MoxieSubtarget;
 namespace MoxieISD {
 enum NodeType : unsigned {
   FIRST_NUMBER = ISD::BUILTIN_OP_END,
+  RET,
   RET_FLAG,
   CALL,
   SELECT_CC,

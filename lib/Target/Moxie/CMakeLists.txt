@@ -5,6 +5,7 @@ tablegen(LLVM MoxieGenRegisterInfo.inc -gen-register-info)
 tablegen(LLVM MoxieGenInstrInfo.inc -gen-instr-info)
 tablegen(LLVM MoxieGenAsmWriter.inc -gen-asm-writer)
 tablegen(LLVM MoxieGenDAGISel.inc -gen-dag-isel)
+tablegen(LLVM MoxieGenCallingConv.inc -gen-callingconv)
 tablegen(LLVM MoxieGenSubtargetInfo.inc -gen-subtarget)
 add_public_tablegen_target(MoxieCommonTableGen)
 
@@ -13,6 +14,7 @@ set(MoxieCodeGen_sources
   MoxieFrameLowering.cpp
   MoxieInstrInfo.cpp
   MoxieISelLowering.cpp
+  MoxieISelDAGtoDAG.cpp
   MoxieMCInstLower.cpp
   MoxieRegisterInfo.cpp
   MoxieSubtarget.cpp
